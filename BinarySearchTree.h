@@ -54,38 +54,68 @@ bool BinarySearchTree<ItemType>::remove(const ItemType & target)
 	this->rootPtr = _remove(this->rootPtr, target, isSuccessful);
 	return isSuccessful; 
 }  
-
+//uses findNode to locate the value and returns false if not found
 template<class ItemType>
 bool BinarySearchTree<ItemType>::getEntry(const ItemType& anEntry, ItemType & returnedItem) const
 {
-    return 0; // <=== remove this when done
+	
+	BinaryNode<ItemType>* newNodePtr = new BinaryNode<ItemType>(returnedItem);
+	newNodePtr = findNode(this->rootPtr, anEntry);
+	if (newNodePtr == NULL) {
+		return false;
+	}
+	returnedItem = newNodePtr->getItem();
+	return true;
 }  
 
 
 
 //////////////////////////// private functions ////////////////////////////////////////////
-
+//inserts the node into the tree by using iteration
 template<class ItemType>
 BinaryNode<ItemType>* BinarySearchTree<ItemType>::_insert(BinaryNode<ItemType>* nodePtr,
                                                           BinaryNode<ItemType>* newNodePtr)
 {
-    return 0; // <=== remove this when done
+	BinaryNode<ItemType>* pWalk;
+	BinaryNode<ItemType>* parent = NULL;
+	if(nodePtr == NULL)
+	{
+		nodePtr = newNodePtr;
+	}
+	else {
+		pWalk = nodePtr;
+		while (pWalk != NULL) {
+			parent = pWalk;
+			if (newNodePtr->getItem().returnKey() < pWalk->getItem().returnKey()) {
+				pWalk = pWalk->getLeftPtr();
+			}
+			else {
+				pWalk = pWalk->getRightPtr();
+			}
+		}
+		if (newNodePtr->getItem().returnKey() < parent->getItem().returnKey()) {
+			parent->setLeftPtr(newNodePtr);
+		}
+		else {
+			parent->setRightPtr(newNodePtr);
+		}
+	}
+	return nodePtr;
 }  
 
 template<class ItemType>
 BinaryNode<ItemType>* BinarySearchTree<ItemType>::_remove(BinaryNode<ItemType>* nodePtr,
                                                           const ItemType target,
                                                           bool & success)
-
 {
 	if (nodePtr == 0)                   
 	{
 		success = false;
 		return 0;
 	}
-	if (nodePtr->getItem() > target)		 
+	if (nodePtr->getItem().returnKey() > target.returnKey())
 		nodePtr->setLeftPtr(_remove(nodePtr->getLeftPtr(), target, success));
-	else if (nodePtr->getItem() < target)	 
+	else if (nodePtr->getItem().returnKey() < target.returnKey())
 		nodePtr->setRightPtr(_remove(nodePtr->getRightPtr(), target, success));
 	else		
 	{
@@ -143,12 +173,18 @@ BinaryNode<ItemType>* BinarySearchTree<ItemType>::removeLeftmostNode(BinaryNode<
 	}       
 }
 
-
+//locates the node for findEntry
 template<class ItemType>
 BinaryNode<ItemType>* BinarySearchTree<ItemType>::findNode(BinaryNode<ItemType>* nodePtr,
                                                            const ItemType & target) const 
 {
+	if (nodePtr == NULL || nodePtr->getItem().returnKey() == target.returnKey())
+		return nodePtr;
 
+	if (nodePtr->getItem().returnKey() < target.returnKey())
+		return findNode(nodePtr->getRightPtr(), target);
+	// Key is smaller than root's key 
+	return findNode(nodePtr->getLeftPtr(), target);
 }  
 
 

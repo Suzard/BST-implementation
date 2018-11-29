@@ -154,6 +154,8 @@
     <ClInclude Include="BinaryNode.h" />
     <ClInclude Include="BinarySearchTree.h" />
     <ClInclude Include="BinaryTree.h" />
+    <ClInclude Include="Employee.h" />
+    <ClInclude Include="Queue.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp" />

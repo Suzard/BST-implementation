@@ -1,0 +1,129 @@
+
+
+                 *~~*~~* WELCOME *~~*~~*
+
+        To the Binary Search Tree Program!
+
+                This program will:
+                 -  Search by a unique key (employee identification number)
+                 -  Recursive Depth-First Traversals: inorder, preorder, postorder
+                 -  Print tree as an indented list (show level numbers)
+                 -  Print smallest or largest key
+                 -  Say welcome again
+                 - These are the following commands
+                         - S stands for search
+                         - D will print out the inorder, preorder, and postorder traversal
+                         - B will print out the breadth first traversal
+                         - T will print out the tree as an indented list
+                         - L will print the smallest key
+                         - H will print the largest key
+                         - M will show the menu again
+                         - Q to quit the program
+                 The ToyList is sorted in ascending order by ToyID
+
+Please enter: S,D,B,T,L,H,M,or Q: S
+Please enter an ID to search for: Notvalidinput
+Invalid input. Please enter an integer
+Please enter: S,D,B,T,L,H,M,or Q: S
+Please enter an ID to search for: 99999999
+Employee does not exist
+Please enter: S,D,B,T,L,H,M,or Q: D
+Tree 1 Preorder Traversal
+Displaying item - 3022
+Displaying item - 1022
+Displaying item - 1011
+Displaying item - 2077
+Displaying item - 2066
+Displaying item - 3099
+Displaying item - 3088
+Displaying item - 3055
+Displaying item - 5044
+Displaying item - 4033
+Tree 1 Inorder Traversal
+Displaying item - 1011
+Displaying item - 1022
+Displaying item - 2066
+Displaying item - 2077
+Displaying item - 3022
+Displaying item - 3055
+Displaying item - 3088
+Displaying item - 3099
+Displaying item - 4033
+Displaying item - 5044
+Tree 1 Postorder Traversal
+Displaying item - 1011
+Displaying item - 2066
+Displaying item - 2077
+Displaying item - 1022
+Displaying item - 3055
+Displaying item - 3088
+Displaying item - 4033
+Displaying item - 5044
+Displaying item - 3099
+Displaying item - 3022
+Please enter: S,D,B,T,L,H,M,or Q: B
+Printing breadth first traversal
+1 ::  [3022]
+2 ::  [1022] [3099]
+3 ::  [1011] [2077] [3088] [5044]
+4 ::  [2066] [3055] [4033]
+Please enter: S,D,B,T,L,H,M,or Q: T
+Printing indented list
+                2.5044
+                        3.4033
+        1.3099
+                2.3088
+                        3.3055
+0.3022
+                2.2077
+                        3.2066
+        1.1022
+                2.1011
+Please enter: S,D,B,T,L,H,M,or Q: L
+Find smallest
+1011
+Please enter: S,D,B,T,L,H,M,or Q: h
+Find largest
+5044
+Please enter: S,D,B,T,L,H,M,or Q: M
+
+
+                 *~~*~~* WELCOME *~~*~~*
+
+        To the Binary Search Tree Program!
+
+                This program will:
+                 -  Search by a unique key (employee identification number)
+                 -  Recursive Depth-First Traversals: inorder, preorder, postorder
+                 -  Print tree as an indented list (show level numbers)
+                 -  Print smallest or largest key
+                 -  Say welcome again
+                 - These are the following commands
+                         - S stands for search
+                         - D will print out the inorder, preorder, and postorder traversal
+                         - B will print out the breadth first traversal
+                         - T will print out the tree as an indented list
+                         - L will print the smallest key
+                         - H will print the largest key
+                         - M will show the menu again
+                         - Q to quit the program
+                 The ToyList is sorted in ascending order by ToyID
+
+Please enter: S,D,B,T,L,H,M,or Q: A
+Edward Chen is the developer
+Please enter: S,D,B,T,L,H,M,or Q: Wrong function
+Invalid input
+Please enter: S,D,B,T,L,H,M,or Q: Q
+Node deleted: 1011
+Node deleted: 2066
+Node deleted: 2077
+Node deleted: 1022
+Node deleted: 3055
+Node deleted: 3088
+Node deleted: 4033
+Node deleted: 5044
+Node deleted: 3099
+Node deleted: 3022
+
+C:\Users\etern\source\repos\Project4\Debug\Project4.exe (process 7832) exited with code 0.
+Press any key to close this window . . .

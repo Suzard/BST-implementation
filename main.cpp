@@ -3,197 +3,276 @@
 // modified by 
 
 #include "BinarySearchTree.h"  // BST ADT 
-#include <iostream>
-#include <string>
-using namespace std;
+#include "Employee.h" 
+#include <fstream>
+#include <sstream>
 
-// display function to pass to BST traverse functions
-void display(string & anItem)
+//function for printing out the nodes while traversing the tree
+void display(Employee & anItem)
 {
-   cout << "Displaying item - " << anItem << endl;
-}  
-
-void check(bool success)
+	cout << "Displaying item - " << anItem.returnKey() << endl;
+}
+//prints out welcome to the user
+void printWelcome()
 {
-   if (success)
-      cout << "Done." << endl;
-   else
-      cout << " Entry not in tree." << endl;
-}  
-
+	cout << "\n\n\t\t *~~*~~* WELCOME *~~*~~*\n\n"
+		<< "\tTo the Binary Search Tree Program!\n\n"
+		<< "\t\tThis program will: \n"
+		<< "\t\t -  Search by a unique key (employee identification number) \n"
+		<< "\t\t -  Recursive Depth-First Traversals: inorder, preorder, postorder \n"
+		<< "\t\t -  Print tree as an indented list (show level numbers)\n"
+		<< "\t\t -  Print smallest or largest key\n"
+		<< "\t\t -  Say welcome again\n"
+		<< "\t\t - These are the following commands\n"
+		<< "\t\t\t - S stands for search\n"
+		<< "\t\t\t - D will print out the inorder, preorder, and postorder traversal\n"
+		<< "\t\t\t - B will print out the breadth first traversal\n"
+		<< "\t\t\t - T will print out the tree as an indented list\n"
+		<< "\t\t\t - L will print the smallest key\n"
+		<< "\t\t\t - H will print the largest key\n"
+		<< "\t\t\t - M will show the menu again\n"
+		<< "\t\t\t - Q to quit the program\n";
+	cout << "\t\t The ToyList is sorted in ascending order by ToyID\n\n";
+}
+//builds the BST based on the input file
+BinarySearchTree<Employee>* buildBST() {
+	BinarySearchTree<Employee>* tree1Ptr = new BinarySearchTree<Employee>();
+	ifstream inFile;
+	inFile.open("employees.txt");
+	string line;
+	while (getline(inFile, line))
+	{
+		string arr[3];
+		int i = 0;
+		stringstream ssin(line);
+		while (ssin.good() && i < 3) {
+			ssin >> arr[i];
+			++i;
+		}
+		string name;
+		//Name is two values at the end
+		name = arr[1] + " " + arr[2];
+		//ID is the first value
+		Employee x(stoi(arr[0]), name);
+		tree1Ptr->insert(x);
+	}
+	return tree1Ptr;
+}
 int main()
 {
-	bool success;
+	BinarySearchTree<Employee>* tree1Ptr = buildBST();
+	string function;
+	printWelcome();
+	cout << "Please enter: S,D,B,T,L,H,M,or Q: ";
+	//starts program
+	while (1) {
+		//keep going until you reach Q
+		getline(cin, function);
+		function[0] = toupper(function[0]);
 
-	// Part 1: inserting data in order:
-   BinarySearchTree<string>* tree1Ptr = new BinarySearchTree<string>();
-   
-   tree1Ptr->insert("10");		// 10
-   tree1Ptr->insert("20");		//	 |
-   tree1Ptr->insert("30");		//    20
-   tree1Ptr->insert("40");		//		|
-   tree1Ptr->insert("50");		//		 30
-								//		   |
-								//          40
-							    //			  |
-							    //			   50
+		if (function == "Q") {
+			tree1Ptr->clear();
+			return 0;
+		}
+		//Searches the binary tree depending on the ID with some error handling
+		else if (function == "S") {
+			string id_input;
+			cout << "Please enter an ID to search for: ";
+			getline(cin, id_input);
+			bool check = true;
+			for (char c : id_input) {
+				if (!isdigit(c)) {
+					check = false;
+					break;
+				}
+			}
+			if (check) {
+				Employee id(stoi(id_input));
+				Employee returnEmployee;
+				tree1Ptr->getEntry(id, returnEmployee);
+				string name = returnEmployee.returnName();
+				if (name != "")
+					cout << returnEmployee.returnName() << " with id " << returnEmployee.returnKey() << endl;
+				else
+					cout << "Employee does not exist" << endl;
+			}
+			else
+				cout << "Invalid input. Please enter an integer " << endl;
+		}
+		//Iterates through the tree with all three traversals printed out
+		else if (function == "D") {
+			cout << "Tree 1 Preorder Traversal\n";
+			tree1Ptr->preOrder(display);
+			cout << "Tree 1 Inorder Traversal\n";
+			tree1Ptr->inOrder(display);
+			cout << "Tree 1 Postorder Traversal\n";
+			tree1Ptr->postOrder(display);
+		}
+		//Iterates through the tree with breadth first traversal
+		else if (function == "B") {
+			cout << "Printing breadth first traversal \n";
+			tree1Ptr->breadthFirst(display);
+		}
+		//Prints the list in indented format
+		else if (function == "T") {
+			cout << "Printing indented list \n";
+			tree1Ptr->printIndented();
+		}
+		//Prints the smallest value
+		else if (function == "L") {
+			cout << "Find smallest\n";
+			tree1Ptr->printSmallest();
+		}
+		//Prints the largest value
+		else if (function == "H") {
+			cout << "Find largest\n";
+			tree1Ptr->printLargest();
+		}
+		//Prints the menu again
+		else if (function == "M") {
+			printWelcome();
+		}
+		//Hidden option for user
+		else if (function == "A") {
+			cout << "Edward Chen is the developer \n";
+		}
+		//Prints if user enters wrong input
+		else {
+			cout << "Invalid input \n";
+		}
+		cout << "Please enter: S,D,B,T,L,H,M,or Q: ";
 
-   cout << "Tree 1 Preorder: Should be 10 20 30 40 50\n";
-   tree1Ptr->preOrder(display);   
-   cout << "Tree 1 Inorder: Should be 10 20 30 40 50\n";
-   tree1Ptr->inOrder(display);  
-   cout << "Tree 1 Postorder: Should be 50 40 30 20 10\n";
-   tree1Ptr->postOrder(display);
-   cout  << endl;   
-
-   cout << "Remove the leaf 50: ";
-   success = tree1Ptr->remove("50");
-   check(success);
-   
-   cout << "Try to remove the leaf 50 again: ";
-   success = tree1Ptr->remove("50");
-   check(success);
-   
-   cout << "Remove the node 40 that has only a right child: ";
-   success = tree1Ptr->remove("40");
-   check(success);
-   
-   cout << "Tree 1 Preorder: Should be 10 20 30\n";		
-   tree1Ptr->preOrder(display);							
-   cout << "Tree 1 Inorder: Should be 10 20 30\n";		
-   tree1Ptr->inOrder(display);							      
-   cout << "Tree 1 Postorder: Should be 30 20 10\n";
-   tree1Ptr->postOrder(display);  
-   cout  << endl;   
-   
-   cout << "Remove the root 10 (has a right subtree): ";
-   success = tree1Ptr->remove("10");
-   check(success);
-   
-   cout << "Tree 1 Preorder: Should be 20 30\n";
-   tree1Ptr->preOrder(display);  
-   cout << "Tree 1 Inorder: Should be 20 30\n";
-   tree1Ptr->inOrder(display);   
-   cout << "Tree 1 Postorder: Should be 30 20\n";
-   tree1Ptr->postOrder(display);
-   cout  << endl; 
-
-
+	}
+	return 0;
+}
 /*
-   // Part 2: Inserting data in random order
-   BinarySearchTree<string> tree2;
-   
-   tree2.insert("40");
-   tree2.insert("20");
-   tree2.insert("10");
-   tree2.insert("60");
-   tree2.insert("50");
-   tree2.insert("70");
-   tree2.insert("30");
-   tree2.insert("80");
-  
-   //       40
-   //     /     \
-   //    20     60
-   //   /  \   /  \
-   //  10  30 50  70
-   //               \
-   //               80
 
-   cout << "Tree 2 Preorder: Should be 40 20 10 30 60 50 70 80\n";
-   tree2.preOrder(display);  
-   cout << "Tree 2 Inorder: Should be 10 20 30 40 50 60 70 80\n";
-   tree2.inOrder(display);   
-   cout << "Tree 2 Postorder: Should be 10 30 20 50 80 70 60 40\n";
-   tree2.postOrder(display);
-   cout  << endl;       
 
-   cout << "Remove the node 70 that has only a right child: ";
-   success = tree2.remove("70");
-   check(success);
-   //        40
-   //     /     \
-   //    20     60
-   //   /  \   /  \
-   //  10  30 50  80
-   
-   cout << "Tree 2 Inorder: Should be 10 20 30 40 50 60 80\n";
-   tree2.inOrder(display);   
-   cout  << endl;      
+				 *~~*~~* WELCOME *~~*~~*
 
-   cout << "Remove the node 60 that has two children: ";
-   success = tree2.remove("60");
-   check(success);
-   //        40
-   //     /     \
-   //    20     80
-   //   /  \   /
-   //  10  30 50
-   
-   cout << "Tree 2 Inorder: Should be 10 20 30 40 50 80\n";
-   tree2.inOrder(display);   
-   cout  << endl; 
+		To the Binary Search Tree Program!
 
-   cout << "Remove the leaf 10: ";
-   success = tree2.remove("10");
-   check(success);
-   //        40
-   //     /     \
-   //    20     80
-   //      \   /
-   //      30 50
-   
-   cout << "Tree 2 Inorder: Should be 20 30 40 50 80\n";
-   tree2.inOrder(display);   
-   cout  << endl;     
+				This program will:
+				 -  Search by a unique key (employee identification number)
+				 -  Recursive Depth-First Traversals: inorder, preorder, postorder
+				 -  Print tree as an indented list (show level numbers)
+				 -  Print smallest or largest key
+				 -  Say welcome again
+				 - These are the following commands
+						 - S stands for search
+						 - D will print out the inorder, preorder, and postorder traversal
+						 - B will print out the breadth first traversal
+						 - T will print out the tree as an indented list
+						 - L will print the smallest key
+						 - H will print the largest key
+						 - M will show the menu again
+						 - Q to quit the program
+				 The ToyList is sorted in ascending order by ToyID
 
-   cout << "Remove the root 40: ";
-   success = tree2.remove("40");
-   check(success);
-   //      50
-   //     /  \
-   //    20   80
-   //      \
-   //      30
-   
-   cout << "Tree 2 Inorder: Should be 20 30 50 80\n";
-   tree2.inOrder(display);   
-   cout  << endl; 
+Please enter: S,D,B,T,L,H,M,or Q: S
+Please enter an ID to search for: Notvalidinput
+Invalid input. Please enter an integer
+Please enter: S,D,B,T,L,H,M,or Q: S
+Please enter an ID to search for: 99999999
+Employee does not exist
+Please enter: S,D,B,T,L,H,M,or Q: D
+Tree 1 Preorder Traversal
+Displaying item - 3022
+Displaying item - 1022
+Displaying item - 1011
+Displaying item - 2077
+Displaying item - 2066
+Displaying item - 3099
+Displaying item - 3088
+Displaying item - 3055
+Displaying item - 5044
+Displaying item - 4033
+Tree 1 Inorder Traversal
+Displaying item - 1011
+Displaying item - 1022
+Displaying item - 2066
+Displaying item - 2077
+Displaying item - 3022
+Displaying item - 3055
+Displaying item - 3088
+Displaying item - 3099
+Displaying item - 4033
+Displaying item - 5044
+Tree 1 Postorder Traversal
+Displaying item - 1011
+Displaying item - 2066
+Displaying item - 2077
+Displaying item - 1022
+Displaying item - 3055
+Displaying item - 3088
+Displaying item - 4033
+Displaying item - 5044
+Displaying item - 3099
+Displaying item - 3022
+Please enter: S,D,B,T,L,H,M,or Q: B
+Printing breadth first traversal
+1 ::  [3022]
+2 ::  [1022] [3099]
+3 ::  [1011] [2077] [3088] [5044]
+4 ::  [2066] [3055] [4033]
+Please enter: S,D,B,T,L,H,M,or Q: T
+Printing indented list
+				2.5044
+						3.4033
+		1.3099
+				2.3088
+						3.3055
+0.3022
+				2.2077
+						3.2066
+		1.1022
+				2.1011
+Please enter: S,D,B,T,L,H,M,or Q: L
+Find smallest
+1011
+Please enter: S,D,B,T,L,H,M,or Q: h
+Find largest
+5044
+Please enter: S,D,B,T,L,H,M,or Q: M
 
-   string returnedString;
-   cout << "Searching for node 80 returns " << tree2.getEntry("80", returnedString) << endl;
-   cout << "Searching for node 40 returns " << tree2.getEntry("40", returnedString) << endl;
+
+				 *~~*~~* WELCOME *~~*~~*
+
+		To the Binary Search Tree Program!
+
+				This program will:
+				 -  Search by a unique key (employee identification number)
+				 -  Recursive Depth-First Traversals: inorder, preorder, postorder
+				 -  Print tree as an indented list (show level numbers)
+				 -  Print smallest or largest key
+				 -  Say welcome again
+				 - These are the following commands
+						 - S stands for search
+						 - D will print out the inorder, preorder, and postorder traversal
+						 - B will print out the breadth first traversal
+						 - T will print out the tree as an indented list
+						 - L will print the smallest key
+						 - H will print the largest key
+						 - M will show the menu again
+						 - Q to quit the program
+				 The ToyList is sorted in ascending order by ToyID
+
+Please enter: S,D,B,T,L,H,M,or Q: A
+Edward Chen is the developer
+Please enter: S,D,B,T,L,H,M,or Q: Wrong function
+Invalid input
+Please enter: S,D,B,T,L,H,M,or Q: Q
+Node deleted: 1011
+Node deleted: 2066
+Node deleted: 2077
+Node deleted: 1022
+Node deleted: 3055
+Node deleted: 3088
+Node deleted: 4033
+Node deleted: 5044
+Node deleted: 3099
+Node deleted: 3022
+C:\Users\etern\source\repos\Project4\Debug\Project4.exe (process 7832) exited with code 0.
+Press any key to close this window . . .
+
 */
-
-/*
-   // Part 3: Copying trees
-   cout << "\nTesting copy constructor: \n";
-   cout << "\nOriginal tree1: \n";
-   cout << "Tree 1 Inorder: Should be 10 20 30 40 50\n";
-   tree1Ptr->inOrder(display); 
-   BinarySearchTree<string> tree1Copy(*tree1Ptr);
-   cout << "Copy of Tree 1 Inorder: Should be 10 20 30 40 50\n";
-   tree1Copy.inOrder(display);  
-   cout  << endl;
-
-   cout << "\nTesting overloaded assignment operator: \n";
-   cout << "\nAfter assigning Tree 1 to Tree 2, we have: \n";
-   tree2 = *tree1Ptr;
-    
-   cout << "Tree 2 Inorder: Should be 10 20 30 40 50\n";
-   tree2.inOrder(display);  
-   cout  << endl;    
-   
-   cout << "Change Tree 2 by removing 10" << endl;
-   tree2.remove("10");
-   
-   cout << "Tree 2 Inorder: Should be 20 30 40 50\n";
-   tree2.inOrder(display);   
-   cout << "Tree 1 Inorder: Should be 10 20 30 40 50\n";
-   tree1Ptr->inOrder(display); 
-   cout  << endl; 
-
-   delete tree1Ptr;
-*/
-   return 0;
-}  
